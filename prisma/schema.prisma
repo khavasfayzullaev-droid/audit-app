@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("USER") // ADMIN, CONSULTANT, USER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  audits    Audit[]
+}
+
+model Audit {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?  // Optional for anonymous/initial flow, or required if auth is forced
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  // Inputs
+  businessOwner   Boolean @default(false)
+  hasCrm          String? // "NO", "AMO", "BITRIX", "OTHER"
+  hasSalesDept    String? // "NO", "YES_X"
+  socialStatus    String? // "BAD", "MID", "GOOD"
+  industry        String?
+  platform        String?
+  revenueGoal     Float?
+  avgCheck        Float?
+  conversionRate  Float?
+  
+  // Calculated Results
+  clientsNeeded   Float?
+  leadsNeeded     Float?
+  budgetMin       Float?
+  budgetOpt       Float?
+  riskScore       String? // "GREEN", "YELLOW", "RED"
+  penaltyTotal    Float?
+  realBudget      Float?
+  
+  // AI Output
+  aiSummary       String? 
+  aiActionPlan    Json?
+}
+
+model Benchmark {
+  id        String   @id @default(cuid())
+  platform  String
+  industry  String
+  cplMin    Float
+  cplOpt    Float
+  
+  @@unique([platform, industry])
+}
