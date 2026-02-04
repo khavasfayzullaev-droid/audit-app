@@ -5,10 +5,11 @@ import { SalesPerson, calculateMetrics, INITIAL_SALES_PEOPLE } from "@/lib/sales
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Plus, Trash2, Download, Save } from "lucide-react";
+import { Plus, Trash2, Download, Save, RefreshCw } from "lucide-react";
 
 export default function SalesConversionView() {
     const [salesPeople, setSalesPeople] = useState<SalesPerson[]>(INITIAL_SALES_PEOPLE);
+    const [currency, setCurrency] = useState<"USD" | "UZS">("USD");
 
     // Calculate total team volume for percentage calculation
     const totalTeamVolume = useMemo(() => {
@@ -75,6 +76,12 @@ export default function SalesConversionView() {
         return totals;
     }, [salesPeople]);
 
+    const formatMoney = (amount: number) => {
+        return currency === "USD"
+            ? `$${amount.toLocaleString()}`
+            : `${amount.toLocaleString()} so'm`;
+    };
+
     return (
         <div className="max-w-[1400px] mx-auto p-4 space-y-6">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -83,6 +90,14 @@ export default function SalesConversionView() {
                     <p className="text-gray-500">Menejerlarning samaradorligini o'lchash paneli</p>
                 </div>
                 <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={() => setCurrency(prev => prev === "USD" ? "UZS" : "USD")}
+                        className="gap-2 border-blue-200 hover:bg-blue-50 text-blue-700"
+                    >
+                        <RefreshCw className="h-4 w-4" />
+                        Valyuta: {currency === "USD" ? "$ (USD)" : "so'm (UZS)"}
+                    </Button>
                     <Button variant="outline" onClick={() => window.print()} className="gap-2">
                         <Download className="h-4 w-4" /> PDF Saqlash
                     </Button>
@@ -94,7 +109,7 @@ export default function SalesConversionView() {
 
             <Card className="shadow-lg border-0 overflow-hidden">
                 <CardHeader className="bg-gray-50/50 border-b pb-4">
-                    <CardTitle className="text-xl">Haftalik/Oylik Hisobot</CardTitle>
+                    <CardTitle className="text-xl">Haftalik/Oylik Hisobot ({currency})</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0 overflow-x-auto">
                     <table className="w-full text-sm text-left">
@@ -124,7 +139,7 @@ export default function SalesConversionView() {
                                 <th className="px-2 py-2 border-r text-center bg-purple-50/30 font-extrabold text-purple-600">Jami Konv %</th>
 
                                 {/* Finance */}
-                                <th className="px-4 py-2 border-r text-center bg-orange-50/30">Sotuv Summasi</th>
+                                <th className="px-4 py-2 border-r text-center bg-orange-50/30">Sotuv Summasi ({currency})</th>
                                 <th className="px-2 py-2 text-center bg-orange-50/30">% Ulushi</th>
                             </tr>
                         </thead>
@@ -196,12 +211,18 @@ export default function SalesConversionView() {
 
                                         {/* Finance */}
                                         <td className="p-2 border-r">
-                                            <Input
-                                                type="number" min="0"
-                                                value={person.salesVolume || ''}
-                                                onChange={(e) => updatePerson(person.id, 'salesVolume', e.target.value)}
-                                                className="h-9 text-right bg-orange-50/10 focus:bg-white font-mono"
-                                            />
+                                            <div className="relative">
+                                                <Input
+                                                    type="number" min="0"
+                                                    value={person.salesVolume || ''}
+                                                    onChange={(e) => updatePerson(person.id, 'salesVolume', e.target.value)}
+                                                    className="h-9 text-right bg-orange-50/10 focus:bg-white font-mono pr-2"
+                                                    placeholder="0"
+                                                />
+                                                <span className="absolute left-2 top-2 text-xs text-gray-400 font-bold pointer-events-none">
+                                                    {currency === 'USD' ? '$' : ''}
+                                                </span>
+                                            </div>
                                         </td>
                                         <td className="p-2 text-center font-bold text-orange-600 bg-orange-50/20">
                                             {metrics.percentageOfTotalVolume.toFixed(1)}%
@@ -243,7 +264,7 @@ export default function SalesConversionView() {
 
                                 {/* Finance Totals */}
                                 <td className="p-3 text-right border-r px-4 text-orange-800">
-                                    ${footerTotals.salesVolume.toLocaleString()}
+                                    {formatMoney(footerTotals.salesVolume)}
                                 </td>
                                 <td className="p-3 text-center text-gray-400">100%</td>
                                 <td></td>
@@ -277,7 +298,7 @@ export default function SalesConversionView() {
                     <h3 className="font-bold text-orange-800 mb-2">Umumiy Daromad</h3>
                     <p className="text-sm text-orange-600 mb-4">Jamoaning jami sotuvi.</p>
                     <div className="text-3xl font-extrabold text-orange-900">
-                        ${footerTotals.salesVolume.toLocaleString()}
+                        {formatMoney(footerTotals.salesVolume)}
                     </div>
                 </div>
             </div>
