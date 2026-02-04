@@ -46,7 +46,7 @@ export default function DashboardView() {
                 <div className="flex gap-2">
                     <Link href="/sales/conversion">
                         <Button variant="outline" className="shadow-sm border-blue-200 text-blue-700 hover:bg-blue-50">
-                            <BarChart3 className="mr-2 h-4 w-4" /> Sotuvchilar KPI
+                            <BarChart3 className="mr-2 h-4 w-4" /> Sotuvchilar konversiyasi
                         </Button>
                     </Link>
                     <Link href="/audits/new">

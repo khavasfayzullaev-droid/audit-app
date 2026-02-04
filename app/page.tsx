@@ -31,7 +31,7 @@ export default function Home() {
                                 href="/sales/conversion"
                                 className="inline-flex items-center px-8 py-4 rounded-full text-lg font-bold text-blue-700 bg-white border-2 border-blue-100 hover:bg-blue-50 transition-all shadow-md hover:shadow-lg hover:-translate-y-1"
                             >
-                                Sotuvchilar KPI
+                                Sotuvchilar konversiyasi
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <line x1="12" y1="20" x2="12" y2="10"></line>
                                     <line x1="18" y1="20" x2="18" y2="4"></line>
