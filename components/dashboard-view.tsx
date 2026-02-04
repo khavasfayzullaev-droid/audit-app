@@ -43,11 +43,18 @@ export default function DashboardView() {
                     <h1 className="text-3xl font-bold tracking-tight">Mening Auditlarim</h1>
                     <p className="text-gray-500">Barcha hisobotlaringiz bu yerda saqlanadi</p>
                 </div>
-                <Link href="/audits/new">
-                    <Button className="shadow-lg bg-blue-600 hover:bg-blue-700">
-                        <Plus className="mr-2 h-4 w-4" /> Yangi Audit
-                    </Button>
-                </Link>
+                <div className="flex gap-2">
+                    <Link href="/sales/conversion">
+                        <Button variant="outline" className="shadow-sm border-blue-200 text-blue-700 hover:bg-blue-50">
+                            <BarChart3 className="mr-2 h-4 w-4" /> Sotuvchilar KPI
+                        </Button>
+                    </Link>
+                    <Link href="/audits/new">
+                        <Button className="shadow-lg bg-blue-600 hover:bg-blue-700">
+                            <Plus className="mr-2 h-4 w-4" /> Yangi Audit
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <div className="grid gap-4">
@@ -81,8 +88,8 @@ export default function DashboardView() {
                                     <div className="text-right hidden sm:block">
                                         <div className="text-sm text-gray-500">Xavf darajasi</div>
                                         <div className={`font-bold ${audit.score === "RED" ? "text-red-600" :
-                                                audit.score === "YELLOW" ? "text-yellow-600" :
-                                                    "text-green-600"
+                                            audit.score === "YELLOW" ? "text-yellow-600" :
+                                                "text-green-600"
                                             }`}>
                                             {audit.score === "RED" ? "YUQORI" : audit.score === "YELLOW" ? "O'RTA" : "PAST"}
                                         </div>
